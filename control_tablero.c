@@ -44,7 +44,7 @@ contenido_t** crear_matriz(size_t longitud)
     {
         matriz[i] = (contenido_t*) malloc(longitud * sizeof(contenido_t));
 
-        if (matriz[i] = NULL) //ERROR generando uno de los dientes. Tenemos que liberar lo que ya creamos.
+        if (matriz[i] == NULL) //ERROR generando uno de los dientes. Tenemos que liberar lo que ya creamos.
         {
             for (size_t j = 0; j < i; j++) //Liberamos primero los dientes que ya hicimos.
             {
@@ -54,9 +54,9 @@ contenido_t** crear_matriz(size_t longitud)
             return NULL;
         }
         
-        for (size_t j = 0; j < longitud; j++)
+        for (size_t j = 0; j < longitud; j++) //Inicialización
         {
-            matriz[i][j] = NADA;
+            matriz[i][j] = LIBRE;
         }
         
     }
@@ -71,4 +71,19 @@ void free_matriz(contenido_t** matriz, size_t longitud)
         free(matriz[i]);
     }
     free(matriz);
+}
+
+void ubi_rndm(contenido_t** matriz, size_t longitud, contenido_t content)
+{
+    do
+    {
+        int fila = rand() % longitud;
+        int colum = rand() % longitud;
+        
+        if (matriz[fila][colum] == LIBRE)
+        {
+            matriz[fila][colum] = content;
+            content = LIBRE; //El contenido a ubicar fue ubicado. Mision cumplida.
+        }
+    } while (content != LIBRE);    
 }

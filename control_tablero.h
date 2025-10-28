@@ -12,9 +12,9 @@
  * Enumeración que dicta las diferentes cosas que pueden haber en una casilla.
  */
 typedef enum{
-    NADA, //Casilla que puede ser ocupada tanto por RATON como por GATO.
-    RATON, //Casilla donde se ubica el RATON, una vez que se mueve el RATON será NADA.
-    GATO, //Casilla donde se ubica el GATO, una vez que se mueve el GATO será NADA.
+    LIBRE, //Casilla que puede ser ocupada tanto por RATON como por GATO.
+    RATON, //Casilla donde se ubica el RATON, una vez que se mueve el RATON será LIBRE.
+    GATO, //Casilla donde se ubica el GATO, una vez que se mueve el GATO será LIBRE.
     PIEDRA, //Casilla donde se ubica una piedra, no puede tener GATO ni RATON.
     LLAVE, //Casilla donde se ubica llave. Elemento con el cual se puede matar al gato.
     SALIDA //Casilla de SALIDA, si el GATO llega a ella se termina el juego.
@@ -74,8 +74,23 @@ contenido_t** creacion_matriz(size_t longitud);
  * Esta función no se encarga de reasignar el puntero doble a un puntero NULL.
  * Esto último es necesario hacerlo a continuación de ser llamada la función con matriz para evitar dangling pointer.
  */
-
 void free_matriz(contenido_t** matriz, size_t longitud);
 
+/**
+ * Se remplaza el valor de un elemento LIBRE aleatorio de una matriz de NxN.
+ * 
+ * @param matriz Puntero doble a la direccion de memoria del primer elemento de una matriz de NxN.
+ * @param longitud La longitud de la matriz asignada.
+ * @param content El valor de contenido_t que quiere ser ubicado en la matriz.
+ * 
+ * @pre
+ *  - La semilla de generador de números aleatorios debe estar inicializada.
+ *  - Las librerías time.h y stdlib.h deben estar incluidas.
+ *  - La enumeración contenido_t debe estar definida.
+ *  - Es necesario que haya al menos un valor LIBRE en la matriz. 
+ * @post
+ *  - La matriz será modificada como efecto secundario de la función.
+ */
+void ubi_rndm(contenido_t** matriz, size_t longitud, contenido_t content);
 
 #endif
