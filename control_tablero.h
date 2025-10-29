@@ -24,9 +24,12 @@ typedef enum{
     SALIDA //Casilla de SALIDA, si el GATO llega a ella se termina el juego.
 }contenido_t;
 
+/**
+ * Enumeración que administra los diferentes tipos de errores producto del manejo del tablero. 
+ * */
 typedef enum{
-    OPERACION_EXITOSA,
-    NO_ESPACIO_MAT,
+    OPERACION_EXITOSA, //La operación funcionó como se espera.
+    NO_ESPACIO_MAT, //La matriz no tiene espacio para ubicar algun contenido.
 }error_t;
 
 /**

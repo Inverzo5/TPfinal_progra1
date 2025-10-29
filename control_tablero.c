@@ -133,6 +133,6 @@ error_t ubi_elements(contenido_t** matriz, size_t longitud, size_t posx_init_cat
         verif_error = ubi_rndm(matriz, longitud, LLAVE, CANTIDAD_PRUEBAS_RAND);
         cant_llave--;
     }
-
+    
     return verif_error;
 }
