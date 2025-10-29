@@ -32,6 +32,12 @@ size_t solicit_len(void)
 
 contenido_t** crear_matriz(size_t longitud)
 {
+    if (longitud < MIN_LONGITUD || longitud > MAX_LONGITUD)
+    {
+        return NULL;
+    }
+    
+    
     contenido_t** matriz = (contenido_t**) malloc(longitud * sizeof(contenido_t*));
     
     if (matriz == NULL)
@@ -108,4 +114,25 @@ error_t ubi_rndm(contenido_t** matriz, size_t longitud, contenido_t content, siz
     }        
 
     return NO_ESPACIO_MAT; //No hay espacio en la matriz para ubicar el contenido.
+}
+
+error_t ubi_elements(contenido_t** matriz, size_t longitud, size_t posx_init_cat, size_t posy_init_cat, size_t cant_piedra, size_t cant_llave)
+{
+    matriz[POSX_INIT_RATON][POSY_INIT_RATON] = RATON;
+    matriz[posx_init_cat][posy_init_cat] = GATO;
+    matriz[longitud - 1][longitud / 2] = SALIDA;
+    
+    error_t verif_error = OPERACION_EXITOSA;
+    while (cant_piedra > 0 && verif_error != NO_ESPACIO_MAT)
+    {
+        verif_error = ubi_rndm(matriz, longitud, PIEDRA, CANTIDAD_PRUEBAS_RAND);
+        cant_piedra--;
+    }
+    while (cant_llave > 0 && verif_error != NO_ESPACIO_MAT)
+    {
+        verif_error = ubi_rndm(matriz, longitud, LLAVE, CANTIDAD_PRUEBAS_RAND);
+        cant_llave--;
+    }
+
+    return verif_error;
 }

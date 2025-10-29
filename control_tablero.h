@@ -10,6 +10,7 @@
 #define MAX_LONGITUD 9
 #define POSX_INIT_RATON 0
 #define POSY_INIT_RATON 0
+#define CANTIDAD_PRUEBAS_RAND 20
 
 /**
  * Enumeración que dicta las diferentes cosas que pueden haber en una casilla.
@@ -49,11 +50,13 @@ size_t solicit_len(void);
  * 
  * @param longitud Longitud de las filas y columnas de la matriz dinámica.
  * @return puntero doble de contendio_t a la dirección de memoria al primer elemento de la matriz,
- *         NULL en caso de no poder crearse la matriz.
+ *         NULL en caso de no poder crearse la matriz o que la longitud sea menor que LONGITUD_MIN o
+ *         mayor que LONGITUD_MAX.
  * 
  * @pre
  *  - La enumeración contenido_t debe estar definida.
  *  - Las librerías stdlib.h y stdio.h deben estar incluidas.
+ *  - Los macros LONGITUD_MIN y LONGITUD_MAX deben estar definidos.
  * @post
  *  - Se retorna un puntero doble.
  *  - Se utiliza memoria del heap disponible.
