@@ -7,6 +7,9 @@
 #include <stdlib.h>
 
 #define MIN_LONGITUD 5
+#define MAX_LONGITUD 9
+#define POSX_INIT_RATON 0
+#define POSY_INIT_RATON 0
 
 /**
  * Enumeración que dicta las diferentes cosas que pueden haber en una casilla.
@@ -19,6 +22,11 @@ typedef enum{
     LLAVE, //Casilla donde se ubica llave. Elemento con el cual se puede matar al gato.
     SALIDA //Casilla de SALIDA, si el GATO llega a ella se termina el juego.
 }contenido_t;
+
+typedef enum{
+    OPERACION_EXITOSA,
+    NO_ESPACIO_MAT,
+}error_t;
 
 /**
  * Función que solicita al usuario la longitud de la matriz del tablero.
@@ -82,15 +90,41 @@ void free_matriz(contenido_t** matriz, size_t longitud);
  * @param matriz Puntero doble a la direccion de memoria del primer elemento de una matriz de NxN.
  * @param longitud La longitud de la matriz asignada.
  * @param content El valor de contenido_t que quiere ser ubicado en la matriz.
+ * @param cant_pruebas Cantidad de pruebas aleatorias hasta verificar que hay espacio libre.
+ * @return OPERACION_EXITOSA si todo funcionó correctamente.
+ *         NO_ESPACIO_MAT la matriz no tiene lugar para ubicar un objeto.
  * 
  * @pre
  *  - La semilla de generador de números aleatorios debe estar inicializada.
  *  - Las librerías time.h y stdlib.h deben estar incluidas.
- *  - La enumeración contenido_t debe estar definida.
- *  - Es necesario que haya al menos un valor LIBRE en la matriz. 
+ *  - Las enumeraciónes contenido_t y error_t deben estar definidas.
  * @post
  *  - La matriz será modificada como efecto secundario de la función.
+ *  - Se retornará un mensaje codificado como error_t.
  */
-void ubi_rndm(contenido_t** matriz, size_t longitud, contenido_t content);
+error_t ubi_rndm(contenido_t** matriz, size_t longitud, contenido_t content, size_t cant_pruebas);
+
+/**
+ * Función que ubica todos los contenidos del juego en la matriz dinámica.
+ * 
+ * @param matriz Puntero doble a la dirección de memoria al primer elemento de la matriz.
+ * @param longitud La longitud de la matriz asignada.
+ * @param posx_init_cat La posicion inicial en x (filas) del gato.
+ * @param posy_init_cat La posicion inicial en y (columnas) del gato.
+ * @param cant_piedra La cantidad de contenidos_t PIEDRA que quieren ser colocadas en la matriz.
+ * @param cant_llave La cantidad de contenidos_t LLAVE que quieren ser colocadas en la matriz.
+ * @return OPERACION_EXITOSA si se pudieron asignar los contenidos correctamente.
+ *         NO_ESPACIO_MAT si no hubo suficiente lugar en a matriz para asignar la cantidad de contenidos proporcionados.
+ * 
+ * @pre
+ * - La semilla de generador de números aleatorios debe estar inicializada.
+ * - Las librerías time.h y stdlib.h deben estar incluidas.
+ * - Las enumeraciónes contenido_t y error_t deben estar definidas.
+ * - Los macros POSX_INIT_RATON y POSY_INIT_RATON deben estar definidos.
+ * @post
+ * - La matriz será modificada como efecto secundario de la función.
+ * - Se retornará un mensaje de proceso en forma de error_t.
+ */
+error_t ubi_elements(contenido_t** matriz, size_t longitud, size_t posx_init_cat, size_t posy_init_cat, size_t cant_piedra, size_t cant_llave);
 
 #endif

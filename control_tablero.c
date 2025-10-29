@@ -7,20 +7,20 @@ size_t solicit_len(void)
 
     while(bucle)
     {
-        printf("Ingrese la cantidad de filas y columnas con las que desea jugar.\nRecuerde que el minimo es 5 y el máximo es 9: ");
+        printf("Ingrese la cantidad de filas y columnas con las que desea jugar.\nRecuerde que el minimo es %i y el máximo es %i: ", MIN_LONGITUD, MAX_LONGITUD);
         char caracter = getchar();
         
         if (isdigit(caracter))
         {
             numero = caracter - '0';
 
-            if (numero >= MIN_LONGITUD)
+            if (numero >= MIN_LONGITUD && MAX_LONGITUD >= numero)
             {
                 printf("Excelente, %i lineas me parece una gran opción\n", numero);
                 bucle = false;
             } else
             {
-                printf("Recuerda que el mínimo de lineas es %i.\nPRUEBA NUEVAMENTE\n", MIN_LONGITUD);
+                printf("Recuerda que el mínimo de lineas es %i y el máximo %i.\nPRUEBA NUEVAMENTE\n", MIN_LONGITUD, MAX_LONGITUD);
             }
         } else
         {
@@ -73,8 +73,10 @@ void free_matriz(contenido_t** matriz, size_t longitud)
     free(matriz);
 }
 
-void ubi_rndm(contenido_t** matriz, size_t longitud, contenido_t content)
+error_t ubi_rndm(contenido_t** matriz, size_t longitud, contenido_t content, size_t cant_pruebas)
 {
+    size_t cant_bucles = 0; //Controlamos la cantidad de bucles.
+
     do
     {
         int fila = rand() % longitud;
@@ -84,6 +86,26 @@ void ubi_rndm(contenido_t** matriz, size_t longitud, contenido_t content)
         {
             matriz[fila][colum] = content;
             content = LIBRE; //El contenido a ubicar fue ubicado. Mision cumplida.
+            return OPERACION_EXITOSA;
         }
-    } while (content != LIBRE);    
+
+        cant_bucles++;
+    } while ((content != LIBRE) && (cant_bucles < cant_pruebas));
+
+    //Se supero la cantidad de pruebas, asignemos el contenido en el primer espacio LIBRE.
+
+    for (size_t fila = 0; fila < longitud; fila++)
+    {
+        for (size_t colum = 0; colum < longitud; colum++)
+        {
+            if (matriz[fila][colum] == LIBRE)
+            {
+                matriz[fila][colum] = content;
+                content = LIBRE; //El contenido a ubicar fue ubicado. Mision cumplida.
+                return OPERACION_EXITOSA;
+            }
+        }
+    }        
+
+    return NO_ESPACIO_MAT; //No hay espacio en la matriz para ubicar el contenido.
 }
