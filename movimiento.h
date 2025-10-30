@@ -5,18 +5,38 @@
 #include <stdbool.h>
 #include "errores.h"
 
+/**
+ * Enumeración que le da un valor entero a las direcciones posibles de movimiento
+ * de un contenido movil.
+ */
 typedef enum{
-    ARRIBA = 0,
-    ABAJO,
-    IZQUIERDA,
-    DERECHA,
-    NUM_DIREC = 4
+    ARRIBA = 0, //Desplazarse hacia arriba (+y)
+    ABAJO, //Desplazarse hacia abajo (-y)
+    IZQUIERDA, //Desplazarse hacia izquierda (-x)
+    DERECHA, //Desplazarse hacia derecha (+x)
+    NUM_DIREC = 4,
+    NO_DIR //Se crea con la intención de poder inicializar las variables a algo o manejar errores.
 }direcciones_t;
 
-typedef struct
-{
-    bool movs[NUM_DIREC];
+/**
+ * Define los movimientos posibles de un contenido_t movil.
+ * true significa que esa dirección está disponible y false que no.
+ */
+typedef struct{
+    bool movs[NUM_DIREC]; //Direcciones posibles ordenadas en el orden de direcciones_t
 }move_disp_t;
+
+/**
+ * Se define un orden de prioridad en los movimientos del gato.
+ * El gato sigue un sistema de acercamiento al raton en el que se acerca en la direccion (x o y)
+ * donde más alejado está de él. Ej: si esta a 3 en x y a 2 en y se acerca por x al ser 3 > 2.
+ * No obstante pueden haber obstaculos en el camino del gato que no le permiten ir en la dirección que él pretende.
+ * Por esto creamos esta estructura que ordena los movimientos de mayor orden de importancia a menor orden.
+ * Ej: gato se tiene que mover hacia arriba, pero hay una piedra, entonces salta al segundo orden y se mueve en esa dirección.
+ */
+typedef struct{
+    direcciones_t priority[NUM_DIREC]; //Lista de mayor prioridad en los movimientos.
+}priority_t;
 
 
 /**
@@ -54,5 +74,24 @@ void movimientos_disponibles(contenido_t** matriz, size_t longitud, size_t ubix,
  */
 error_t mover(contenido_t* origen, contenido_t* destino);
 
+/**
+ * Se ordena en importancia decreciente la dirección más conveniente para el gato.
+ * 
+ * @param ubix_cat Ubicación en x del gato.
+ * @param ubiy_cat Ubicación en y del gato.
+ * @param ubix_raton Ubicación en x del raton.
+ * @param ubiy_raton Ubicación en y del raton.
+ * @return Estructura priority_t que ordena en orden decreciente las direcciones prioritarias del gato.
+ * 
+ * @pre
+ * - Las direcciones del gato y el raton deben ser sobre la matriz dinámica creada.
+ * - La librería stdlib.h debe estar incluida.
+ * @post
+ * - Se retornará una estructura priority.
+ * @warning
+ * - La función no retorna un código de error, pero cualquier tipo de error se puede verificar facilmente
+ * evaluando si algunas de las prioridades dice NO_DIR puesto que no se asignaron correctamente. 
+ */
+priority_t calc_priority(size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, size_t ubiy_raton);
 
 #endif
