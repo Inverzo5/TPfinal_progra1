@@ -34,3 +34,16 @@ void movimientos_disponibles(contenido_t** matriz, size_t longitud, size_t ubix,
         }
     }
 }
+
+error_t mover(contenido_t* origen, contenido_t* destino)
+{
+    if (origen == NULL || destino == NULL)
+    {
+        return PUNTERO_NULO;
+    } else
+    {
+        *destino = *origen;
+        *origen = LIBRE;
+        return OPERACION_EXITOSA;
+    }
+}

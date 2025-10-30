@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include "errores.h"
 
 #define MIN_LONGITUD 5
 #define MAX_LONGITUD 9
@@ -23,14 +24,6 @@ typedef enum{
     LLAVE, //Casilla donde se ubica llave. Elemento con el cual se puede matar al gato.
     SALIDA //Casilla de SALIDA, si el GATO llega a ella se termina el juego.
 }contenido_t;
-
-/**
- * Enumeración que administra los diferentes tipos de errores producto del manejo del tablero. 
- * */
-typedef enum{
-    OPERACION_EXITOSA, //La operación funcionó como se espera.
-    NO_ESPACIO_MAT, //La matriz no tiene espacio para ubicar algun contenido.
-}error_t;
 
 /**
  * Función que solicita al usuario la longitud de la matriz del tablero.
