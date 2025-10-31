@@ -10,6 +10,8 @@ typedef enum{
     NO_ESPACIO_MAT, //La matriz no tiene espacio para ubicar algun contenido.
 
     PUNTERO_NULO, //Un puntero asignado apunta a NULL.
+
+    CONTENIDO_BLOQUEADO //Un contenido movil no puede moverse.
 }error_t;
 
 #endif

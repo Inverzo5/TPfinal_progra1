@@ -21,6 +21,9 @@ typedef enum{
 /**
  * Define los movimientos posibles de un contenido_t movil.
  * true significa que esa dirección está disponible y false que no.
+ * El orden de las direcciones se corresponde con el orden de las direcciones declaradas en
+ * la enumeración direcciones_t. Es decir:
+ * 0 -> ARRIBA 1 -> ABAJO 2 -> IZQUIERDA 3 -> DERECHA
  */
 typedef struct{
     bool movs[NUM_DIREC]; //Direcciones posibles ordenadas en el orden de direcciones_t
@@ -35,7 +38,7 @@ typedef struct{
  * Ej: gato se tiene que mover hacia arriba, pero hay una piedra, entonces salta al segundo orden y se mueve en esa dirección.
  */
 typedef struct{
-    direcciones_t priority[NUM_DIREC]; //Lista de mayor prioridad en los movimientos.
+    direcciones_t orden[NUM_DIREC]; //Lista de mayor prioridad en los movimientos.
 }priority_t;
 
 
@@ -61,6 +64,8 @@ void movimientos_disponibles(contenido_t** matriz, size_t longitud, size_t ubix,
  * 
  * @param origen [in/out] Puntero a la casilla donde se ubica el contenido movil.
  * @param destino [in/out] Puntero a la casilla de destino del contenido movil.
+ * @param is_llave [out] Puntero que pondrá su valor en true en caso de que el contenido movil
+ * entre en contacto con una llave, es decir, que el puntero destino apunte a una LLAVE.
  * @return OPERACION_EXITOSA en caso de funcionar correctamente,
  *         PUNTERO_NULO si alguno de los punteros apunta a NULL.
  * 
@@ -71,8 +76,9 @@ void movimientos_disponibles(contenido_t** matriz, size_t longitud, size_t ubix,
  * - Como efecto de la función el contenido de destino tendrá el contenido_t que contenía
  * origen mientras que origen tendrá LIBRE.
  * - Se retornará un error_t que subyase el resultado de la operación.
+ * - En caso de que no haya llave el valor de is_llave no sufre cambios.
  */
-error_t mover(contenido_t* origen, contenido_t* destino);
+error_t mover(contenido_t* origen, contenido_t* destino, bool* is_llave);
 
 /**
  * Se ordena en importancia decreciente la dirección más conveniente para el gato.
@@ -93,5 +99,10 @@ error_t mover(contenido_t* origen, contenido_t* destino);
  * evaluando si algunas de las prioridades dice NO_DIR puesto que no se asignaron correctamente. 
  */
 priority_t calc_priority(size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, size_t ubiy_raton);
+
+/**
+ * Se encarga de mover el gato a la casilla de mayor conveniencia.
+ */
+error_t move_cat();
 
 #endif

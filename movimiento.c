@@ -35,13 +35,17 @@ void movimientos_disponibles(contenido_t** matriz, size_t longitud, size_t ubix,
     }
 }
 
-error_t mover(contenido_t* origen, contenido_t* destino)
+error_t mover(contenido_t* origen, contenido_t* destino, bool* is_llave)
 {
     if (origen == NULL || destino == NULL)
     {
         return PUNTERO_NULO;
     } else
     {
+        if (*destino == LLAVE)
+        {
+            *is_llave = true;
+        }
         *destino = *origen;
         *origen = LIBRE;
         return OPERACION_EXITOSA;
@@ -78,11 +82,6 @@ priority_t calc_priority(size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, si
         segunda_priority = (max_priority == DERECHA) ? ABAJO : DERECHA;
     }
     
-    direcciones_t matriz_opuestos[2][3] = {
-        {DERECHA, IZQUIERDA, DERECHA},
-        {ARRIBA, ABAJO, ARRIBA}
-    };
-
     direcciones_t tercera_priority = NO_DIR;
     direcciones_t ultima_priority = NO_DIR;
 
@@ -98,6 +97,51 @@ priority_t calc_priority(size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, si
         case IZQUIERDA: tercera_priority = DERECHA; break;
         case DERECHA:   tercera_priority = IZQUIERDA; break;
     }
-    priority_t orden_priority = {.priority = {max_priority, segunda_priority, tercera_priority, ultima_priority}};
+    priority_t orden_priority = {.orden = {max_priority, segunda_priority, tercera_priority, ultima_priority}};
     return orden_priority;
+}
+
+error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, size_t ubiy_raton)
+{
+    move_disp_t disp_cat; //No hace falta inicializarla puesto que se limpia en la función.
+    movimientos_disponibles(matriz, longitud, ubix_cat, ubiy_cat, &disp_cat);
+
+    priority_t prioridad = calc_priority(ubix_cat, ubiy_cat, ubix_raton, ubiy_raton);
+
+    direcciones_t mov_resultante = NO_DIR;
+
+    for (size_t i = 0; i < NUM_DIREC; i++)
+    {
+        if (prioridad.orden[i] != NO_DIR && disp_cat.movs[prioridad.orden[i]])
+        {
+            mov_resultante = prioridad.orden[i];
+        }    
+    }
+
+    if (mov_resultante == NO_DIR) // Si no se encontró una dirección válida, hay un bug lógico o el gato está bloqueado.
+    {
+        for (size_t i = 0; i < NUM_DIREC; i++)
+        {
+            if ((disp_cat.movs[i]))
+            {
+                mov_resultante = (direcciones_t) i;
+            }
+        }
+    }
+    
+    if (mov_resultante == NO_DIR)
+    {
+        return CONTENIDO_BLOQUEADO;
+    } else
+    {
+        bool llave = false; //El gato ignora el hecho de que haya llave, ignoramos esta variable.
+
+        switch(mov_resultante) {
+        case ARRIBA:    mover(matriz[ubiy_cat][ubix_cat], matriz[ubiy_cat - 1][ubix_cat], &llave); break;
+        case ABAJO:     mover(matriz[ubiy_cat][ubix_cat], matriz[ubiy_cat + 1][ubix_cat], &llave); break;
+        case IZQUIERDA: mover(matriz[ubiy_cat][ubix_cat], matriz[ubiy_cat][ubix_cat - 1], &llave); break;
+        case DERECHA:   mover(matriz[ubiy_cat][ubix_cat], matriz[ubiy_cat][ubix_cat + 1], &llave); break;
+        }
+        return OPERACION_EXITOSA;
+    }
 }
