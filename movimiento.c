@@ -35,21 +35,30 @@ void movimientos_disponibles(contenido_t** matriz, size_t longitud, size_t ubix,
     }
 }
 
-error_t mover(contenido_t* origen, contenido_t* destino, bool* is_llave)
+error_t mover(contenido_t* origen, contenido_t* destino, bool* is_llave, bool* is_salida, bool cat_estaba_salida)
 {
     if (origen == NULL || destino == NULL)
     {
         return PUNTERO_NULO;
+    }
+    if (*destino == LLAVE)
+    {
+        *is_llave = true;
+    }
+    if (*destino == SALIDA)
+    {
+        *is_salida = true;
+    }
+
+    *destino = *origen;
+    if (cat_estaba_salida)
+    {
+        *origen = SALIDA;
     } else
     {
-        if (*destino == LLAVE)
-        {
-            *is_llave = true;
-        }
-        *destino = *origen;
-        *origen = LIBRE;
-        return OPERACION_EXITOSA;
+        *origen = LIBRE;   
     }
+    return OPERACION_EXITOSA;
 }
 
 priority_t calc_priority(size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, size_t ubiy_raton)
@@ -101,7 +110,7 @@ priority_t calc_priority(size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, si
     return orden_priority;
 }
 
-error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, size_t ubiy_raton)
+error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, size_t ubiy_raton, bool* is_salida, bool cat_estaba_salida)
 {
     move_disp_t disp_cat; //No hace falta inicializarla puesto que se limpia en la función.
     movimientos_disponibles(matriz, longitud, ubix_cat, ubiy_cat, &disp_cat);
@@ -141,10 +150,10 @@ error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t 
         bool llave = false; //El gato ignora el hecho de que haya llave, ignoramos esta variable.
 
         switch(mov_resultante) {
-        case ARRIBA:    mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat - 1][ubix_cat], &llave); break;
-        case ABAJO:     mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat + 1][ubix_cat], &llave); break;
-        case IZQUIERDA: mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat][ubix_cat - 1], &llave); break;
-        case DERECHA:   mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat][ubix_cat + 1], &llave); break;
+        case ARRIBA:    mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat - 1][ubix_cat], &llave, is_salida, cat_estaba_salida); break;
+        case ABAJO:     mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat + 1][ubix_cat], &llave, is_salida, cat_estaba_salida); break;
+        case IZQUIERDA: mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat][ubix_cat - 1], &llave, is_salida, cat_estaba_salida); break;
+        case DERECHA:   mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat][ubix_cat + 1], &llave, is_salida, cat_estaba_salida); break;
         }
         return OPERACION_EXITOSA;
     }

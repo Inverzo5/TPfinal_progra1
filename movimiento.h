@@ -66,6 +66,9 @@ void movimientos_disponibles(contenido_t** matriz, size_t longitud, size_t ubix,
  * @param destino [in/out] Puntero a la casilla de destino del contenido movil.
  * @param is_llave [out] Puntero que pondrá su valor en true en caso de que el contenido movil
  * entre en contacto con una llave, es decir, que el puntero destino apunte a una LLAVE.
+ * @param is_salida [out] Puntero que pondrá su valor en true en caso de que el contenido movil
+ * entre en contacto con la salida, es decir, que el puntero destino apunte a la salida.
+ * @param cat_estaba_salida Valor booleano que marca si el gato esta pisando la salida del raón antes del movimiento.
  * @return OPERACION_EXITOSA en caso de funcionar correctamente,
  *         PUNTERO_NULO si alguno de los punteros apunta a NULL.
  * 
@@ -77,8 +80,9 @@ void movimientos_disponibles(contenido_t** matriz, size_t longitud, size_t ubix,
  * origen mientras que origen tendrá LIBRE.
  * - Se retornará un error_t que subyase el resultado de la operación.
  * - En caso de que no haya llave el valor de is_llave no sufre cambios.
+ * - En caso de que no haya salida el valor de is_salida no sufre cambios.
  */
-error_t mover(contenido_t* origen, contenido_t* destino, bool* is_llave);
+error_t mover(contenido_t* origen, contenido_t* destino, bool* is_llave, bool* is_salida, bool cat_estaba_salida);
 
 /**
  * Se ordena en importancia decreciente la dirección más conveniente para el gato.
@@ -109,6 +113,9 @@ priority_t calc_priority(size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, si
  * @param ubiy_cat Ubicación en y del gato.
  * @param ubix_raton Ubicación en x del raton.
  * @param ubiy_raton Ubicación en y del raton.
+ * @param is_salida [out] Puntero que pondrá su valor en true en caso de que el contenido movil
+ * entre en contacto con la salida, es decir, que el puntero destino apunte a la salida.
+ * @param cat_estaba_salida Valor booleano que marca si el gato esta pisando la salida del raón antes del movimiento.
  * @return OPERACION_EXITOSA en caso de hacer el movimiento con exito.
  *         CONTENIDO_BLOQUEADO en caso de que haya ningun movimiento posible para el gato.
  * 
@@ -122,7 +129,7 @@ priority_t calc_priority(size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, si
  * En caso de que el retorno sea OPERACION_EXITOSA.
  * - En caso de retornar CONTENIDO_BLOQUEADO no se efectuan cambios en la matriz.
  */
-error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, size_t ubiy_raton);
+error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, size_t ubiy_raton, bool* is_salida, bool cat_estaba_salida);
 
 /** 
  * Se comunica con el usuario para obtener la direccion hacia donde se desea mover el raton.
