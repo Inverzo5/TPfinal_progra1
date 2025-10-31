@@ -124,7 +124,23 @@ priority_t calc_priority(size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, si
  */
 error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, size_t ubiy_raton);
 
-/** */
-direcciones_t eleccion_dir_raton();
+/** 
+ * Se comunica con el usuario para obtener la direccion hacia donde se desea mover el raton.
+ * 
+ * @param matriz Puntero doble a la direccion de memoria del primer elemento de la matriz.
+ * @param longitud La longitud de la matriz asignada.
+ * @param ubix_raton Ubicación en x del raton.
+ * @param ubiy_raton Ubicación en y del raton.
+ * @return La dirección hacia donde se desea mover el raton.
+ *         Caso especial: en caso de retornar NO_DIR implica que el raton se encuentra encerrado. Sin dirección.
+ * 
+ * @pre
+ * - La librería ctype.h y stdlib.h deben estar incluidas.
+ * - matriz debe apuntar al tablero de NxN.
+ * - La función movimientos_disponibles debe estar definida.
+ * @post
+ * - La matriz NO sufrirá cambios.
+*/
+direcciones_t eleccion_dir_raton(contenido_t** matriz, size_t longitud, size_t ubix_raton, size_t ubiy_raton);
 
 #endif
