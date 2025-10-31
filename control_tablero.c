@@ -2,31 +2,37 @@
 
 size_t solicit_len(void)
 {
-    int numero;
+    char buffer[20];
+    int numero = 0;
     bool bucle = true;
 
-    while(bucle)
+    while (bucle)
     {
-        printf("Ingrese la cantidad de filas y columnas con las que desea jugar.\nRecuerde que el minimo es %i y el máximo es %i: ", MIN_LONGITUD, MAX_LONGITUD);
-        char caracter = getchar();
-        
-        if (isdigit(caracter))
-        {
-            numero = caracter - '0';
+        printf("Ingrese la cantidad de filas y columnas con las que desea jugar.\n");
+        printf("Recuerde que el mínimo es %i y el máximo es %i: ", MIN_LONGITUD, MAX_LONGITUD);
 
-            if (numero >= MIN_LONGITUD && MAX_LONGITUD >= numero)
-            {
-                printf("Excelente, %i lineas me parece una gran opción\n", numero);
-                bucle = false;
-            } else
-            {
-                printf("Recuerda que el mínimo de lineas es %i y el máximo %i.\nPRUEBA NUEVAMENTE\n", MIN_LONGITUD, MAX_LONGITUD);
-            }
-        } else
+        if (fgets(buffer, sizeof(buffer), stdin))
         {
-            printf("Recuerda que debes ingresar un número.\nPRUEBA NUEVAMENTE\n");
-        }    
+            if (isdigit((unsigned char)buffer[0])) //Control si la primera letra es numérica.
+            {
+                numero = atoi(buffer);
+
+                if (numero >= MIN_LONGITUD && numero <= MAX_LONGITUD)
+                {
+                    printf("Excelente, %i líneas me parece una gran opción\n", numero);
+                    bucle = false;
+                } else
+                {
+                    printf("Recuerda que el mínimo de líneas es %i y el máximo %i.\nPRUEBA NUEVAMENTE\n", MIN_LONGITUD, MAX_LONGITUD);
+                }
+            }
+            else
+            {
+                printf("Recuerda que debes ingresar un número.\nPRUEBA NUEVAMENTE\n");
+            }
+        }
     }
+
     return (size_t)numero;
 }
 

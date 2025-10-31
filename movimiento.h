@@ -102,7 +102,29 @@ priority_t calc_priority(size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, si
 
 /**
  * Se encarga de mover el gato a la casilla de mayor conveniencia.
+ * 
+ * @param matriz Puntero doble a la direccion de memoria del primer elemento de la matriz.
+ * @param longitud La longitud de la matriz asignada.
+ * @param ubix_cat Ubicación en x del gato.
+ * @param ubiy_cat Ubicación en y del gato.
+ * @param ubix_raton Ubicación en x del raton.
+ * @param ubiy_raton Ubicación en y del raton.
+ * @return OPERACION_EXITOSA en caso de hacer el movimiento con exito.
+ *         CONTENIDO_BLOQUEADO en caso de que haya ningun movimiento posible para el gato.
+ * 
+ * @pre
+ * - Los headers errores.h y control_tablero.h deben estar incluidos.
+ * - Las funciones calc_priority, mover y movimientos_disponibles deben estar definidas.
+ * - El puntero matriz debe apuntar al tablero de NxN creado.
+ * - Las librerías stdbool.h, stdlib.h y stdio.h deben estar incluidas.
+ * @post
+ * - La función generará un cambio en la matriz asignada como efecto secundario de la función.
+ * En caso de que el retorno sea OPERACION_EXITOSA.
+ * - En caso de retornar CONTENIDO_BLOQUEADO no se efectuan cambios en la matriz.
  */
-error_t move_cat();
+error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, size_t ubiy_raton);
+
+/** */
+direcciones_t eleccion_dir_raton();
 
 #endif

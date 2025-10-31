@@ -110,21 +110,25 @@ error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t 
 
     direcciones_t mov_resultante = NO_DIR;
 
-    for (size_t i = 0; i < NUM_DIREC; i++)
+    bool flag_it = true;
+    for (size_t i = 0; i < NUM_DIREC && flag_it; i++)
     {
         if (prioridad.orden[i] != NO_DIR && disp_cat.movs[prioridad.orden[i]])
         {
             mov_resultante = prioridad.orden[i];
+            flag_it = false;
         }    
     }
 
+    bool flag_it = true;
     if (mov_resultante == NO_DIR) // Si no se encontró una dirección válida, hay un bug lógico o el gato está bloqueado.
     {
-        for (size_t i = 0; i < NUM_DIREC; i++)
+        for (size_t i = 0; i < NUM_DIREC && flag_it; i++)
         {
             if ((disp_cat.movs[i]))
             {
                 mov_resultante = (direcciones_t) i;
+                flag_it = false;
             }
         }
     }
@@ -137,11 +141,74 @@ error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t 
         bool llave = false; //El gato ignora el hecho de que haya llave, ignoramos esta variable.
 
         switch(mov_resultante) {
-        case ARRIBA:    mover(matriz[ubiy_cat][ubix_cat], matriz[ubiy_cat - 1][ubix_cat], &llave); break;
-        case ABAJO:     mover(matriz[ubiy_cat][ubix_cat], matriz[ubiy_cat + 1][ubix_cat], &llave); break;
-        case IZQUIERDA: mover(matriz[ubiy_cat][ubix_cat], matriz[ubiy_cat][ubix_cat - 1], &llave); break;
-        case DERECHA:   mover(matriz[ubiy_cat][ubix_cat], matriz[ubiy_cat][ubix_cat + 1], &llave); break;
+        case ARRIBA:    mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat - 1][ubix_cat], &llave); break;
+        case ABAJO:     mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat + 1][ubix_cat], &llave); break;
+        case IZQUIERDA: mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat][ubix_cat - 1], &llave); break;
+        case DERECHA:   mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat][ubix_cat + 1], &llave); break;
         }
         return OPERACION_EXITOSA;
     }
+}
+
+direcciones_t eleccion_dir_raton(contenido_t** matriz, size_t longitud, size_t ubix_raton, size_t ubiy_raton)
+{
+    move_disp_t disp_raton;
+    movimientos_disponibles(matriz, longitud, ubix_raton, ubiy_raton, &disp_raton);
+    int cant_mov_inhabilitados = 0;
+    for (size_t i = 0; i < NUM_DIREC; i++)
+    {
+        if (!disp_raton.movs[i])
+        {
+            cant_mov_inhabilitados++;
+        }
+    }
+    if (cant_mov_inhabilitados == NUM_DIREC) //Ninguna dirección está habilitada.
+    {
+        return NO_DIR;
+    }
+    printf("ES TU TURNO\nSeleccioná la dirección en la que queres moverte\n");
+    printf("--------------------------------------------------------------\n");
+    
+    direcciones_t dir_elegida = NO_DIR;
+    do
+    {
+        const char* nombres_dir[] = {"ARRIBA", "ABAJO", "IZQUIERDA", "DERECHA"}; 
+        for (size_t i = 0; i < NUM_DIREC; i++)
+        {
+            printf("Para ir hacia %s ingresa %zu\n", nombres_dir[i], i); //Imprimimos el menú.
+        }
+            
+        char eleccion_caracter = getchar();
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF); //Debemos limpiar el buffer de entrada puesto que solo se obtiene un valor.
+
+        if (isdigit((unsigned char) eleccion_caracter))
+        {
+            int eleccion_numero = eleccion_caracter - '0'; //Uso de distanciamiento ASCII.
+
+            if (eleccion_numero >= 0 && eleccion_numero < NUM_DIREC)
+            {
+                dir_elegida = (direcciones_t) eleccion_numero;
+            } else
+            {
+                printf("No seleccionaste una dirección posible.\nPresta atención a la tabla de selección a continuación:\n");
+            }
+        } else
+        {
+            printf("No ingresaste un número.\nRecordá que solo debés escribir el número correspondiente a la dirección.\n");
+        }
+
+        if (dir_elegida != NO_DIR) //Veamos si efectivamente puede ir en esa dirección.
+        {
+            if(disp_raton.movs[(size_t)dir_elegida])
+            {
+                printf("Excelente idea\n");
+            } else {
+                printf("Ten cuidado!\nVas a hacer que el ratón se mate\nPrueba en otra dirección.");
+                dir_elegida = NO_DIR;
+            }
+        }
+    } while (dir_elegida == NO_DIR);
+    
+    return dir_elegida;
 }
