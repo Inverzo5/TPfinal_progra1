@@ -150,4 +150,20 @@ error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t 
 */
 direcciones_t eleccion_dir_raton(contenido_t** matriz, size_t longitud, size_t ubix_raton, size_t ubiy_raton);
 
+/**
+ * Cambia la ubicación dinámica de alguno de los contenidos moviles.
+ * 
+ * @param dir_select Dirección en la que se movió el contenido.
+ * @param posx [in/out] puntero a la ubicación previa del contenido movil en x.
+ * @param posy [in/out] puntero a la ubicación previa del contenido movil en y.
+ * 
+ * @pre
+ * - Los punteros posx y posy no pueden ser nulos.
+ * @post
+ * - En caso de que dir_select sea una dirección valida habrá un cambio en el contenido
+ * de alguno de los dos punteros.
+ */
+void dir_elegida(direcciones_t dir_select, size_t* posx, size_t* posy);
+
+
 #endif

@@ -235,3 +235,13 @@ direcciones_t eleccion_dir_raton(contenido_t** matriz, size_t longitud, size_t u
     return dir_elegida;
 }
 
+void dir_elegida(direcciones_t dir_select, size_t* posx, size_t* posy)
+{
+    switch (dir_select)
+    {
+    case ARRIBA: *posy--;  break;
+    case ABAJO: *posy++;  break;
+    case IZQUIERDA: *posx--;  break;
+    case DERECHA: *posx++;  break;
+    }
+}
