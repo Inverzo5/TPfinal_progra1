@@ -38,4 +38,6 @@ int soli_max_numero(void);
  */
 int consult_result(int num1, int num2);
 
+bool ope_player();
+
 #endif

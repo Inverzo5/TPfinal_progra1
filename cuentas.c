@@ -68,3 +68,22 @@ int consult_result(int num1, int num2)
     printf("\n");
     return resultado;
 }
+
+bool ope_player(int tabla_max)
+{
+    int num1 = 1 + (rand() % tabla_max); //Le agregamos 1 para que vaya de 1 a tabla_max
+    int num2 = 1 + (rand() % tabla_max);
+
+    int result_player = consult_result(num1, num2);
+    if (result_player == num1 * num2)
+    {
+        printf("Has resuelto correctamente la operación!!!\n");
+        return true;
+    } else
+    {
+        printf("UPS! Parece que ese no es el resultado");
+        return false;
+    }
+    
+    
+}

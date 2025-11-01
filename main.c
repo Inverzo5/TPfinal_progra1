@@ -1,5 +1,12 @@
-#include <stdlib.h>
+#include "control_tablero.h"
+#include "cuentas.h"
+#include "errores.h"
+#include "movimiento.h"
 #include <time.h>
 
-//INCLUIR srnd
+int main(void) {
+    srand((unsigned int) time(NULL));
+
+    
+}
     

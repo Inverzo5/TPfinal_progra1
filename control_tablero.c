@@ -146,3 +146,24 @@ error_t ubi_elements(contenido_t** matriz, size_t longitud, size_t posx_init_cat
     
     return verif_error;
 }
+
+void print_tablero(contenido_t** matriz, size_t longitud)
+{
+    for (size_t i = 0; i < longitud; i++)
+    {
+        for (size_t j = 0; j < longitud; j++)
+        {
+            switch (matriz[i][j])
+            {
+            case LIBRE:  printf("⚪"); break;
+            case RATON:  printf("🐭"); break;
+            case GATO:   printf("🐱"); break;
+            case PIEDRA: printf("🪨"); break;
+            case LLAVE:  printf("🔑"); break;
+            case SALIDA: printf("🏁"); break;
+            }
+        }
+        printf("\n");
+    }
+    
+}
