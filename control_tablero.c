@@ -4,10 +4,8 @@ size_t solicit_len(void)
 {
     char buffer[20];
     int numero = 0;
-    bool bucle = true;
 
-    while (bucle)
-    {
+    do{
         printf("Ingrese la cantidad de filas y columnas con las que desea jugar.\n");
         printf("Recuerde que el mínimo es %i y el máximo es %i: ", MIN_LONGITUD, MAX_LONGITUD);
 
@@ -20,18 +18,24 @@ size_t solicit_len(void)
                 if (numero >= MIN_LONGITUD && numero <= MAX_LONGITUD)
                 {
                     printf("Excelente, %i líneas me parece una gran opción\n", numero);
-                    bucle = false;
                 } else
                 {
                     printf("Recuerda que el mínimo de líneas es %i y el máximo %i.\nPRUEBA NUEVAMENTE\n", MIN_LONGITUD, MAX_LONGITUD);
+                    numero = 0;
                 }
             }
             else
             {
                 printf("Recuerda que debes ingresar un número.\nPRUEBA NUEVAMENTE\n");
             }
+        } else //No se leyó correctamente el fgets o no se entregó nada.
+        {
+            printf("Error al leer la entrada o no se ingresó nada. Inténtalo nuevamente.\n");
+            clearerr(stdin);
         }
-    }
+        
+
+    } while (numero == 0);
 
     return (size_t)numero;
 }
