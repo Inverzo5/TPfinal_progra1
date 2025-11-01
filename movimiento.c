@@ -110,7 +110,8 @@ priority_t calc_priority(size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, si
     return orden_priority;
 }
 
-error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, size_t ubiy_raton, bool* is_salida, bool cat_estaba_salida)
+error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, 
+    size_t ubiy_raton, bool* is_salida, bool cat_estaba_salida, direcciones_t* dir_select)
 {
     move_disp_t disp_cat; //No hace falta inicializarla puesto que se limpia en la función.
     movimientos_disponibles(matriz, longitud, ubix_cat, ubiy_cat, &disp_cat);
@@ -129,7 +130,7 @@ error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t 
         }    
     }
 
-    bool flag_it = true;
+    flag_it = true;
     if (mov_resultante == NO_DIR) // Si no se encontró una dirección válida, hay un bug lógico o el gato está bloqueado.
     {
         for (size_t i = 0; i < NUM_DIREC && flag_it; i++)
@@ -150,10 +151,22 @@ error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t 
         bool llave = false; //El gato ignora el hecho de que haya llave, ignoramos esta variable.
 
         switch(mov_resultante) {
-        case ARRIBA:    mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat - 1][ubix_cat], &llave, is_salida, cat_estaba_salida); break;
-        case ABAJO:     mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat + 1][ubix_cat], &llave, is_salida, cat_estaba_salida); break;
-        case IZQUIERDA: mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat][ubix_cat - 1], &llave, is_salida, cat_estaba_salida); break;
-        case DERECHA:   mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat][ubix_cat + 1], &llave, is_salida, cat_estaba_salida); break;
+        case ARRIBA:    
+            mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat - 1][ubix_cat], &llave, is_salida, cat_estaba_salida);
+            *dir_select = ARRIBA;
+            break;
+        case ABAJO:     
+            mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat + 1][ubix_cat], &llave, is_salida, cat_estaba_salida); 
+            *dir_select = ABAJO;
+            break;
+        case IZQUIERDA: 
+            mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat][ubix_cat - 1], &llave, is_salida, cat_estaba_salida); 
+            *dir_select = IZQUIERDA;
+            break;
+        case DERECHA:   
+        mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat][ubix_cat + 1], &llave, is_salida, cat_estaba_salida); 
+        *dir_select = DERECHA;
+        break;
         }
         return OPERACION_EXITOSA;
     }
@@ -213,7 +226,7 @@ direcciones_t eleccion_dir_raton(contenido_t** matriz, size_t longitud, size_t u
             {
                 printf("Excelente idea\n");
             } else {
-                printf("Ten cuidado!\nVas a hacer que el ratón se mate\nPrueba en otra dirección.");
+                printf("Ten cuidado!\nVas a hacer que el ratón se mate\nPrueba en otra dirección.\n");
                 dir_elegida = NO_DIR;
             }
         }
@@ -221,3 +234,4 @@ direcciones_t eleccion_dir_raton(contenido_t** matriz, size_t longitud, size_t u
     
     return dir_elegida;
 }
+

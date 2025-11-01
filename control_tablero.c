@@ -42,12 +42,6 @@ size_t solicit_len(void)
 
 contenido_t** crear_matriz(size_t longitud)
 {
-    if (longitud < MIN_LONGITUD || longitud > MAX_LONGITUD)
-    {
-        return NULL;
-    }
-    
-    
     contenido_t** matriz = (contenido_t**) malloc(longitud * sizeof(contenido_t*));
     
     if (matriz == NULL)
@@ -155,12 +149,12 @@ void print_tablero(contenido_t** matriz, size_t longitud)
         {
             switch (matriz[i][j])
             {
-            case LIBRE:  printf("⚪"); break;
-            case RATON:  printf("🐭"); break;
-            case GATO:   printf("🐱"); break;
-            case PIEDRA: printf("🪨"); break;
-            case LLAVE:  printf("🔑"); break;
-            case SALIDA: printf("🏁"); break;
+            case LIBRE:  printf(" ⚪");  break;
+            case RATON:  printf(" 🐭");  break;
+            case GATO:   printf(" 🐱");  break;
+            case PIEDRA: printf(" 🪨 "); break;
+            case LLAVE:  printf(" 🔑");  break;
+            case SALIDA: printf(" 🏁");  break;
             }
         }
         printf("\n");

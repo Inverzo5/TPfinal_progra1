@@ -46,23 +46,22 @@ size_t solicit_len(void);
  * 
  * @param longitud Longitud de las filas y columnas de la matriz dinámica.
  * @return puntero doble de contendio_t a la dirección de memoria al primer elemento de la matriz,
- *         NULL en caso de no poder crearse la matriz o que la longitud sea menor que LONGITUD_MIN o
- *         mayor que LONGITUD_MAX.
+ *         NULL en caso de no poder crearse la matriz debido a falta de memoria dinámica.
  * 
  * @pre
- *  - La enumeración contenido_t debe estar definida.
- *  - Las librerías stdlib.h y stdio.h deben estar incluidas.
- *  - Los macros LONGITUD_MIN y LONGITUD_MAX deben estar definidos.
+ * - La enumeración contenido_t debe estar definida.
+ * - Las librerías stdlib.h y stdio.h deben estar incluidas.
  * @post
- *  - Se retorna un puntero doble.
- *  - Se utiliza memoria del heap disponible.
+ * - Se retorna un puntero doble.
+ * - Se utiliza memoria del heap disponible.
+ * - La matriz se inicializa toda en LIBRE.
  * 
  * @warning
  * Esta matriz fue hecha dinamicamente, es necesario liberar la memoria utilizada una vez
  * que se haya terminado de usar para evitar fugas de memoria.
  * Función designada: free_matriz.
  */
-contenido_t** creacion_matriz(size_t longitud);
+contenido_t** crear_matriz(size_t longitud);
 
 /**
  * Libera matriz dinámica dentada de tipo contenido_t de NxN.
@@ -125,5 +124,22 @@ error_t ubi_rndm(contenido_t** matriz, size_t longitud, contenido_t content, siz
  * - Se retornará un mensaje de proceso en forma de error_t.
  */
 error_t ubi_elements(contenido_t** matriz, size_t longitud, size_t posx_init_cat, size_t posy_init_cat, size_t cant_piedra, size_t cant_llave);
+
+/**
+ * Imprime el tablero en la terminal.
+ * 
+ * @param matriz Puntero doble a la dirección de memoria al primer elemento de la matriz.
+ * @param longitud La longitud de la matriz asignada.
+ * 
+ * @pre
+ * - La enumeración contenido_t debe estar definida.
+ * - La librería stdio.h debe estar incluida.
+ * @post
+ * - Se imprimirá en la terinal la matriz que simboliza el tablero, generará un efecto secundario.
+ * @warning
+ * - Esta función imprimirá emojis, esto es correspondiente al UTF-8. Terminales viejas pueden llegar a
+ * funcionar mal con esta función. 
+ */
+void print_tablero(contenido_t** matriz, size_t longitud);
 
 #endif

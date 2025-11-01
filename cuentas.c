@@ -7,7 +7,7 @@ int soli_max_numero(void)
 
     do {
         printf("Elegí que entre hasta la tabla de multiplicar que más te guste...\n"
-               "Recordá que la minima posible es %i y la máxima es %i", TABLA_MIN, TABLA_MAX);
+               "Recordá que la minima posible es %i y la máxima es %i:  ", TABLA_MIN, TABLA_MAX);
 
         if (fgets(buffer, sizeof(buffer), stdin))
         {
