@@ -5,24 +5,26 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include "errores.h"
+#include "extras.h"
 
 #define MIN_LONGITUD 5
-#define MAX_LONGITUD 9
+#define MAX_LONGITUD 20
 #define POSX_INIT_RATON 0
 #define POSY_INIT_RATON 0
 #define CANTIDAD_PRUEBAS_RAND 20
+#define MAX_BUFFER 20
 
 /**
- * Enumeración que dicta las diferentes cosas que pueden haber en una casilla.
+ * Llamaremos contenidos (type contenido_t) a los diferentes tipos de objetos o animales que puede contener
+ * una casilla del tablero.
  */
 typedef enum{
-    LIBRE, //Casilla que puede ser ocupada tanto por RATON como por GATO.
-    RATON, //Casilla donde se ubica el RATON, una vez que se mueve el RATON será LIBRE.
-    GATO, //Casilla donde se ubica el GATO, una vez que se mueve el GATO será LIBRE.
-    PIEDRA, //Casilla donde se ubica una piedra, no puede tener GATO ni RATON.
-    LLAVE, //Casilla donde se ubica llave. Elemento con el cual se puede matar al gato.
-    SALIDA //Casilla de SALIDA, si el GATO llega a ella se termina el juego.
+    LIBRE,  //Casilla que no contiene nada y puede ser potencialmente ocupada por el GATO o el RATON.
+    RATON,  //Casilla donde se ubica el RATON, una vez que se mueve el RATON quedará LIBRE.
+    GATO,   //Casilla donde se ubica el GATO, una vez que se mueve el GATO quedará LIBRE.
+    PIEDRA, //Casilla donde se ubica una piedra, precenta un obstaculo para el RATON y el GATO.
+    LLAVE,  //Casilla donde se ubica llave. Elemento con el cual se puede matar al gato.
+    SALIDA  //Casilla de SALIDA, si el RATON llega a ella se termina el juego.
 }contenido_t;
 
 /**

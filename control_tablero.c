@@ -2,42 +2,45 @@
 
 size_t solicit_len(void)
 {
-    char buffer[20];
-    int numero = 0;
+    char buffer[MAX_BUFFER];
+    int longitud = 0;
 
     do{
-        printf("Ingrese la cantidad de filas y columnas con las que desea jugar.\n");
-        printf("Recuerde que el mínimo es %i y el máximo es %i: ", MIN_LONGITUD, MAX_LONGITUD);
+        printf("Este juego requiere de un tablero cuadrado.\n"
+               "Ingrese la longitud del tablero con el que desea jugar.\n"
+               "Recuerde que el tamaño mínimo es %i y el máximo es %i: \n", 
+               MIN_LONGITUD, MAX_LONGITUD);
 
         if (fgets(buffer, sizeof(buffer), stdin))
         {
-            if (isdigit((unsigned char)buffer[0])) //Control si la primera letra es numérica.
+            if (isdigit((unsigned char)buffer[0]))
             {
-                numero = atoi(buffer);
+                longitud = atoi(buffer);
 
-                if (numero >= MIN_LONGITUD && numero <= MAX_LONGITUD)
+                if (longitud >= MIN_LONGITUD && longitud <= MAX_LONGITUD)
                 {
-                    printf("Excelente, %i líneas me parece una gran opción\n", numero);
-                } else
+                    printf("Excelente, %i líneas me parece una gran opción.\n", longitud);
+                } 
+                else
                 {
-                    printf("Recuerda que el mínimo de líneas es %i y el máximo %i.\nPRUEBA NUEVAMENTE\n", MIN_LONGITUD, MAX_LONGITUD);
-                    numero = 0;
+                    printf("ERROR!!!\nRecuerda que el mínimo de líneas es %i y el máximo es %i.\n",
+                            MIN_LONGITUD, MAX_LONGITUD);
+                    longitud = 0;
                 }
             }
             else
             {
-                printf("Recuerda que debes ingresar un número.\nPRUEBA NUEVAMENTE\n");
+                printf("ERROR!!!\nRecuerda que debes ingresar un número.\n");
             }
-        } else //No se leyó correctamente el fgets o no se entregó nada.
+        } 
+        else //fgets no leyó correctamente.
         {
-            printf("Error al leer la entrada o no se ingresó nada. Inténtalo nuevamente.\n");
+            printf("Tuvimos un error leyendo tu entrada.\nInténtalo nuevamente.\n");
             clearerr(stdin);
         }
-        
+    } while (longitud == 0);
 
-    } while (numero == 0);
-
-    return (size_t)numero;
+    return (size_t)longitud;
 }
 
 contenido_t** crear_matriz(size_t longitud)

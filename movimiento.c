@@ -72,7 +72,7 @@ priority_t calc_priority(size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, si
     direcciones_t max_priority = NO_DIR;
     direcciones_t segunda_priority = NO_DIR;
     
-    if (ubix_cat > ubix_raton && ubiy_cat > ubiy_raton) //El gato está al sureste del ratón.
+    if (ubix_cat >= ubix_raton && ubiy_cat >= ubiy_raton) //El gato está al sureste del ratón. //RETOCAR ESTOS IGUALESSSS
     {
         dif_x = ubix_cat - ubix_raton;
         dif_y = ubiy_cat - ubiy_raton;

@@ -1,5 +1,5 @@
-#ifndef ERRORES_H
-#define ERRORES_H
+#ifndef CONTROL_GENERAL_H
+#define CONTROL_GENERAL_H
 
 /**
  * Enumeración que administra los diferentes tipos de errores que pueden suceder en el manejo del programa. 
@@ -13,5 +13,11 @@ typedef enum{
 
     CONTENIDO_BLOQUEADO //Un contenido movil no puede moverse.
 }error_t;
+
+typedef enum{
+    EN_JUEGO,
+    VICTORIA,
+    DERROTA,
+}estado_t;
 
 #endif

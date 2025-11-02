@@ -3,7 +3,7 @@
 
 #include "control_tablero.h"
 #include <stdbool.h>
-#include "errores.h"
+#include "extras.h"
 
 /**
  * Enumeración que le da un valor entero a las direcciones posibles de movimiento

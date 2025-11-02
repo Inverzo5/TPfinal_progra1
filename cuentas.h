@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#define TABLA_MAX 100
+#define TABLA_MAX 10000
 #define TABLA_MIN 5
 
 /**

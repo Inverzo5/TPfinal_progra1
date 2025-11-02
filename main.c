@@ -1,8 +1,7 @@
 #include "control_tablero.h"
 #include "cuentas.h"
-#include "errores.h"
+#include "extras.h"
 #include "movimiento.h"
-#include "estado_juego.h"
 #include <time.h>
 
 int main(void) {
@@ -119,7 +118,7 @@ int main(void) {
             if (pos_actual_gato[0] == pos_actual_raton[0] && pos_actual_gato[1] == pos_actual_raton[1])
             {
                 printf("OH NO!!!\nEl gato te a comido.\nPERDISTE\n");
-                estado_juego == DERROTA;
+                estado_juego = DERROTA;
             }
         }
         print_tablero(ptr_tablero, len_tablero);
