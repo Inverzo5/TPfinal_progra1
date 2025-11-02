@@ -129,7 +129,8 @@ priority_t calc_priority(size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, si
  * En caso de que el retorno sea OPERACION_EXITOSA.
  * - En caso de retornar CONTENIDO_BLOQUEADO no se efectuan cambios en la matriz.
  */
-error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton, size_t ubiy_raton, bool* is_salida, bool cat_estaba_salida);
+error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t ubiy_cat, size_t ubix_raton,
+                size_t ubiy_raton, bool* is_salida, bool cat_estaba_salida, direcciones_t* dir_select);
 
 /** 
  * Se comunica con el usuario para obtener la direccion hacia donde se desea mover el raton.

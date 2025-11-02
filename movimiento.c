@@ -9,26 +9,26 @@ void movimientos_disponibles(contenido_t** matriz, size_t longitud, size_t ubix,
 
 
     const int direct_incr[NUM_DIREC][2] = {
-        {0,  1}, // Derecha
-        {0, -1}, // Izquierda
-        {-1, 0}, // Arriba
-        {1,  0}  // Abajo
+        {-1, 0}, // ARRIBA
+        {1,  0}, // ABAJO
+        {0, -1}, // IZQUIERDA
+        {0,  1}  // DERECHA
     };
 
     for (size_t i = 0; i < NUM_DIREC; i++)
     {
         bool direc_en_tablero = true; //Variable flag que controla si la dirección pretendida salta del tablero.
 
-        if ((ubix == 0 && direct_incr[i][0] < 0) || (ubiy == 0 && direct_incr[i][1] < 0))
+        if ((ubix == 0 && direct_incr[i][1] < 0) || (ubiy == 0 && direct_incr[i][0] < 0))
         {
             direc_en_tablero = false;
         }
-        if ((ubix == longitud - 1 && direct_incr[i][0] > 0) || (ubiy == longitud - 1 && direct_incr[i][1] > 0))
+        if ((ubix == (longitud - 1) && direct_incr[i][1] > 0) || (ubiy == (longitud - 1) && direct_incr[i][0] > 0))
         {
             direc_en_tablero = false;
         }        
 
-        if (direc_en_tablero && matriz[ubiy + direct_incr[i][1]][ubix + direct_incr[i][0]] != PIEDRA)
+        if (direc_en_tablero && matriz[ubiy + direct_incr[i][0]][ubix + direct_incr[i][1]] != PIEDRA)
         {
             posible_mov->movs[i] = true;
         }
@@ -239,9 +239,9 @@ void dir_elegida(direcciones_t dir_select, size_t* posx, size_t* posy)
 {
     switch (dir_select)
     {
-    case ARRIBA: *posy--;  break;
-    case ABAJO: *posy++;  break;
-    case IZQUIERDA: *posx--;  break;
-    case DERECHA: *posx++;  break;
+    case ARRIBA: (*posy)--;  break;
+    case ABAJO: (*posy)++;  break;
+    case IZQUIERDA: (*posx)--;  break;
+    case DERECHA: (*posx)++;  break;
     }
 }

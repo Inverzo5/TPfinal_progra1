@@ -56,11 +56,21 @@ int main(void) {
     *pos_actual_gato = posy_init_gato;
     *(pos_actual_gato + 1) = posx_init_gato;
 
-
+    bool raton_has_key = false;
+    bool raton_in_salida = false;
 
     while (sigue_jugando)
     {
-        /* code */
+        direcciones_t dir_selec = eleccion_dir_raton(ptr_tablero, len_tablero, *(pos_actual_raton + 1), *pos_actual_raton);
+        if (ope_player(tabla_max)) //Resolvió correctamente!!!
+        {
+            size_t posx_prev_raton = *(pos_actual_raton + 1);
+            size_t posy_prev_raton = *pos_actual_raton;
+            dir_elegida(dir_selec, (pos_actual_raton + 1), pos_actual_raton);
+            mover(&ptr_tablero[posy_prev_raton][posx_prev_raton], &ptr_tablero[pos_actual_raton[0]][pos_actual_raton[1]], &raton_has_key,
+                  &raton_in_salida, false);
+        }
+        print_tablero(ptr_tablero, len_tablero);   
     }
     
     
