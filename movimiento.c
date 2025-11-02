@@ -48,7 +48,11 @@ error_t mover(contenido_t* origen, contenido_t* destino, bool* is_llave, bool* i
     if (*destino == SALIDA)
     {
         *is_salida = true;
+    } else
+    {
+        *is_salida = false;
     }
+    
 
     *destino = *origen;
     if (cat_estaba_salida)
@@ -164,9 +168,9 @@ error_t move_cat(contenido_t** matriz, size_t longitud, size_t ubix_cat, size_t 
             *dir_select = IZQUIERDA;
             break;
         case DERECHA:   
-        mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat][ubix_cat + 1], &llave, is_salida, cat_estaba_salida); 
-        *dir_select = DERECHA;
-        break;
+            mover(&matriz[ubiy_cat][ubix_cat], &matriz[ubiy_cat][ubix_cat + 1], &llave, is_salida, cat_estaba_salida); 
+            *dir_select = DERECHA;
+            break;
         }
         return OPERACION_EXITOSA;
     }
