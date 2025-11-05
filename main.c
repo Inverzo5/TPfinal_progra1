@@ -5,8 +5,8 @@
 #include <time.h>
 
 int main(void) {
-    error_t control_errores = OPERACION_EXITOSA;
     srand((unsigned int) time(NULL));
+    error_t control_errores = OPERACION_EXITOSA;
 
     size_t len_tablero = solicit_len();
     int tabla_max = soli_max_numero();
@@ -19,7 +19,7 @@ int main(void) {
         return 1;
     }
 
-    size_t posx_init_gato = len_tablero - 1; //Inicializamos el gato en la esquina inferior.
+    size_t posx_init_gato = len_tablero - 1;
     size_t posy_init_gato = len_tablero - 1;
     
     /**
@@ -44,7 +44,7 @@ int main(void) {
                "Prueba cambiar la cantidad de memoria dinámica disponible o abrir una nueva terminal.\n");
         return 1;
     }
-    *pos_actual_raton = POSY_INIT_RATON;
+    *pos_actual_raton       = POSY_INIT_RATON;
     *(pos_actual_raton + 1) = POSX_INIT_RATON;
     size_t* pos_actual_gato = (size_t*) malloc(sizeof(size_t) * 2);
     if (pos_actual_gato == NULL)
@@ -53,7 +53,7 @@ int main(void) {
                "Prueba cambiar la cantidad de memoria dinámica disponible o abrir una nueva terminal.\n");
         return 1;
     }
-    *pos_actual_gato = posy_init_gato;
+    *pos_actual_gato       = posy_init_gato;
     *(pos_actual_gato + 1) = posx_init_gato;
 
     bool raton_has_key = false;
@@ -74,8 +74,8 @@ int main(void) {
             size_t posx_prev_raton = *(pos_actual_raton + 1);
             size_t posy_prev_raton = *pos_actual_raton;
             dir_elegida(dir_selec, (pos_actual_raton + 1), pos_actual_raton);
-            mover(&ptr_tablero[posy_prev_raton][posx_prev_raton], &ptr_tablero[pos_actual_raton[0]][pos_actual_raton[1]], &raton_has_key,
-                  &raton_in_salida, false);
+            mover(&ptr_tablero[posy_prev_raton][posx_prev_raton], &ptr_tablero[pos_actual_raton[0]][pos_actual_raton[1]],
+                &raton_has_key, &raton_in_salida, false);
         }
         if (raton_in_salida)
         {

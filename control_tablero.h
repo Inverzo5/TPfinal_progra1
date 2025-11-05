@@ -12,7 +12,6 @@
 #define POSX_INIT_RATON 0
 #define POSY_INIT_RATON 0
 #define CANTIDAD_PRUEBAS_RAND 20
-#define MAX_BUFFER 20
 
 /**
  * Llamaremos contenidos (type contenido_t) a los diferentes tipos de objetos o animales que puede contener
@@ -28,71 +27,67 @@ typedef enum{
 }contenido_t;
 
 /**
- * Función que solicita al usuario la longitud de la matriz del tablero.
+ * Se solicita al usuario el tamaño del tablero.
  * 
- * @return Entero sin signo obtenido del usuario entre 5 y 9.
+ * @return Entero sin signo (size_t) obtenido del usuario entre MIN_LONGITUD y MAX_LONGITUD.
  * 
  * @pre
- *  - Las librerias ctype.h, stdio.h y stdbool.h deben estar incluidas.
- *  - El marco MIN_LONGITUD debe estar definido.
+ * - Las librerias ctype.h, stdio.h y stdbool.h deben estar incluidas.
+ * - El marco MIN_LONGITUD y MAX_LONGITUD debe estar definido.
+ * - El header local extras.h debe estar incluido.
  * @post
- *  - Se retornará un entero sin signo.
- * 
- * @warning
- *  - FUNCIÓN IMPURA: Se comunica con el usuario a travez de getchar.
+ *  - Se retornará un entero sin signo obtenido a traves de comunicación con el usuario.
  */
 size_t solicit_len(void);
 
 /**
- * Crea una matriz dinámica del tipo contenido_t de NxN.
+ * Crea matriz dentada dinámica del tipo contenido_t de NxN.
  * 
- * @param longitud Longitud de las filas y columnas de la matriz dinámica.
- * @return puntero doble de contendio_t a la dirección de memoria al primer elemento de la matriz,
+ * @param longitud Longitud de las filas y columnas de la matriz dinámica (el tablero).
+ * @return puntero doble de tipo contendio_t que apunta al primer elemento de la matriz creada,
  *         NULL en caso de no poder crearse la matriz debido a falta de memoria dinámica.
+ * 
+ * @warning Esta matriz fue hecha dinamicamente, es necesario liberar la memoria utilizada una vez
+ * que se haya terminado de usar para evitar fugas de memoria.
+ * Función designada: free_matriz.
  * 
  * @pre
  * - La enumeración contenido_t debe estar definida.
  * - Las librerías stdlib.h y stdio.h deben estar incluidas.
  * @post
- * - Se retorna un puntero doble.
+ * - Se retorna un puntero doble de tipo contenido_t.
  * - Se utiliza memoria del heap disponible.
- * - La matriz se inicializa toda en LIBRE.
- * 
- * @warning
- * Esta matriz fue hecha dinamicamente, es necesario liberar la memoria utilizada una vez
- * que se haya terminado de usar para evitar fugas de memoria.
- * Función designada: free_matriz.
+ * - TOdas las celdas de la matriz son inicializadas con el valor LIBRE.
  */
 contenido_t** crear_matriz(size_t longitud);
 
 /**
- * Libera matriz dinámica dentada de tipo contenido_t de NxN.
+ * Libera matriz dentada dinámica de tipo contenido_t de NxN.
  * 
- * @param matriz Puntero doble a la dirección de memoria del primer elemento de la matriz dinámica.
- * @param longitud Longitud de la matriz dinámica creada.
+ * @param matriz Puntero doble al primer elemento de la matriz dinámica.
+ * @param longitud Longitud de la matriz dinámica.
+ * 
+ * @warning Esta función no se encarga de reasignar el puntero doble a un puntero NULL.
+ * Es necesario hacerlo a continuación de ser llamada la función para evitar dangling pointer.
  * 
  * @pre
  *  - La matriz dinámica de NxN ya debe haber sido creada.
  *  - La enumeración contenido_t debe estar definida.
- *  - Las librerías stdio.h y stddef.h deben estar incluidas.
+ *  - La librería stdlib.h debe estar incluida.
  * @post
  *  - La memoria dinámica asignada será liberada.
- * 
- * @warning
- * Esta función no se encarga de reasignar el puntero doble a un puntero NULL.
- * Esto último es necesario hacerlo a continuación de ser llamada la función con matriz para evitar dangling pointer.
  */
 void free_matriz(contenido_t** matriz, size_t longitud);
 
 /**
- * Se remplaza el valor de un elemento LIBRE aleatorio de una matriz de NxN.
+ * Se remplaza el valor de una casilla LIBRE aleatorio del tablero por uno asignado.
  * 
- * @param matriz Puntero doble a la direccion de memoria del primer elemento de una matriz de NxN.
- * @param longitud La longitud de la matriz asignada.
- * @param content El valor de contenido_t que quiere ser ubicado en la matriz.
+ * @param matriz Puntero doble al primer elemento de la matriz dinámica.
+ * @param longitud Longitud de la matriz dinámica.
+ * @param content El valor del contenido_t que quiere ser ubicado en la matriz.
  * @param cant_pruebas Cantidad de pruebas aleatorias hasta verificar que hay espacio libre.
- * @return OPERACION_EXITOSA si todo funcionó correctamente.
- *         NO_ESPACIO_MAT la matriz no tiene lugar para ubicar un objeto.
+ * @return OPERACION_EXITOSA si se ubico el contenido correctamente en una casilla,
+ *         NO_ESPACIO_MAT la matriz no tiene lugar para ubicar un contenido.
  * 
  * @pre
  *  - La semilla de generador de números aleatorios debe estar inicializada.
@@ -105,42 +100,45 @@ void free_matriz(contenido_t** matriz, size_t longitud);
 error_t ubi_rndm(contenido_t** matriz, size_t longitud, contenido_t content, size_t cant_pruebas);
 
 /**
- * Función que ubica todos los contenidos del juego en la matriz dinámica.
+ * Se ubica todos los contenidos del juego en la matriz dinámica.
  * 
- * @param matriz Puntero doble a la dirección de memoria al primer elemento de la matriz.
- * @param longitud La longitud de la matriz asignada.
+ * @param matriz Puntero doble al primer elemento de la matriz dinámica.
+ * @param longitud Longitud de la matriz dinámica.
  * @param posx_init_cat La posicion inicial en x (filas) del gato.
  * @param posy_init_cat La posicion inicial en y (columnas) del gato.
- * @param cant_piedra La cantidad de contenidos_t PIEDRA que quieren ser colocadas en la matriz.
- * @param cant_llave La cantidad de contenidos_t LLAVE que quieren ser colocadas en la matriz.
+ * @param cant_piedra La cantidad de PIEDRA que quieren ser colocadas en la matriz.
+ * @param cant_llave La cantidad de LLAVE que quieren ser colocadas en la matriz.
  * @return OPERACION_EXITOSA si se pudieron asignar los contenidos correctamente.
- *         NO_ESPACIO_MAT si no hubo suficiente lugar en a matriz para asignar la cantidad de contenidos proporcionados.
+ *         NO_ESPACIO_MAT si no hubo suficiente lugar en a matriz para asignar la 
+ *         cantidad de contenidos pretendidos.
  * 
  * @pre
  * - La semilla de generador de números aleatorios debe estar inicializada.
  * - Las librerías time.h y stdlib.h deben estar incluidas.
  * - Las enumeraciónes contenido_t y error_t deben estar definidas.
  * - Los macros POSX_INIT_RATON y POSY_INIT_RATON deben estar definidos.
+ * - La función ubi_rndm debe estar definida.
  * @post
  * - La matriz será modificada como efecto secundario de la función.
- * - Se retornará un mensaje de proceso en forma de error_t.
+ * - Se retornará un mensaje del resultado del proceso en forma de error_t.
  */
-error_t ubi_elements(contenido_t** matriz, size_t longitud, size_t posx_init_cat, size_t posy_init_cat, size_t cant_piedra, size_t cant_llave);
+error_t ubi_elements(contenido_t** matriz, size_t longitud, size_t posx_init_cat, size_t posy_init_cat,
+                     size_t cant_piedra, size_t cant_llave);
 
 /**
  * Imprime el tablero en la terminal.
  * 
- * @param matriz Puntero doble a la dirección de memoria al primer elemento de la matriz.
- * @param longitud La longitud de la matriz asignada.
+ * @param matriz Puntero doble al primer elemento de la matriz dinámica.
+ * @param longitud Longitud de la matriz dinámica.
+ * 
+ * @warning Esta función imprimirá emojis, esto es correspondiente al UTF-8. Terminales viejas pueden
+ * llegar a funcionar mal con esta función. 
  * 
  * @pre
  * - La enumeración contenido_t debe estar definida.
  * - La librería stdio.h debe estar incluida.
  * @post
- * - Se imprimirá en la terinal la matriz que simboliza el tablero, generará un efecto secundario.
- * @warning
- * - Esta función imprimirá emojis, esto es correspondiente al UTF-8. Terminales viejas pueden llegar a
- * funcionar mal con esta función. 
+ * - Se imprimirá en la terinal la matriz que simboliza el tablero.
  */
 void print_tablero(contenido_t** matriz, size_t longitud);
 

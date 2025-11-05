@@ -46,40 +46,33 @@ size_t solicit_len(void)
 contenido_t** crear_matriz(size_t longitud)
 {
     contenido_t** matriz = (contenido_t**) malloc(longitud * sizeof(contenido_t*));
-    
     if (matriz == NULL)
     {
         return NULL;
     }
-    
-
     for (size_t i = 0; i < longitud; i++)
     {
         matriz[i] = (contenido_t*) malloc(longitud * sizeof(contenido_t));
-
         if (matriz[i] == NULL) //ERROR generando uno de los dientes. Tenemos que liberar lo que ya creamos.
         {
-            for (size_t j = 0; j < i; j++) //Liberamos primero los dientes que ya hicimos.
+            for (size_t j = 0; j < i; j++) 
             {
                 free(matriz[j]);
             }
             free(matriz);
             return NULL;
         }
-        
         for (size_t j = 0; j < longitud; j++) //Inicialización
         {
             matriz[i][j] = LIBRE;
-        }
-        
+        }   
     }
-    
     return matriz;
 }
 
 void free_matriz(contenido_t** matriz, size_t longitud)
 {
-    for (size_t i = 0; i < longitud; i++)
+    for (size_t i = 0; i < longitud; i++) //Liberamos los dientes primero.
     {
         free(matriz[i]);
     }
@@ -88,47 +81,47 @@ void free_matriz(contenido_t** matriz, size_t longitud)
 
 error_t ubi_rndm(contenido_t** matriz, size_t longitud, contenido_t content, size_t cant_pruebas)
 {
-    size_t cant_bucles = 0; //Controlamos la cantidad de bucles.
-
+    error_t estado_process = OPERACION_EN_PROCESO;
+    size_t cant_bucles = 0;
     do
     {
-        int fila = rand() % longitud;
-        int colum = rand() % longitud;
-        
+        int fila  = rand() % longitud;
+        int colum = rand() % longitud;   
         if (matriz[fila][colum] == LIBRE)
         {
             matriz[fila][colum] = content;
-            content = LIBRE; //El contenido a ubicar fue ubicado. Mision cumplida.
-            return OPERACION_EXITOSA;
+            estado_process = OPERACION_EXITOSA;
         }
-
         cant_bucles++;
-    } while ((content != LIBRE) && (cant_bucles < cant_pruebas));
-
+    } while ((estado_process == OPERACION_EN_PROCESO) && (cant_bucles < cant_pruebas));
     //Se supero la cantidad de pruebas, asignemos el contenido en el primer espacio LIBRE.
-
-    for (size_t fila = 0; fila < longitud; fila++)
-    {
-        for (size_t colum = 0; colum < longitud; colum++)
+    if (estado_process == OPERACION_EN_PROCESO)
+    {    
+        for (size_t fila = 0; fila < longitud; fila++)
         {
-            if (matriz[fila][colum] == LIBRE)
+            for (size_t colum = 0; colum < longitud && estado_process == OPERACION_EN_PROCESO; colum++)
             {
-                matriz[fila][colum] = content;
-                content = LIBRE; //El contenido a ubicar fue ubicado. Mision cumplida.
-                return OPERACION_EXITOSA;
+                if (matriz[fila][colum] == LIBRE)
+                {
+                    matriz[fila][colum] = content;
+                    estado_process = OPERACION_EXITOSA;
+                }
             }
-        }
-    }        
-
-    return NO_ESPACIO_MAT; //No hay espacio en la matriz para ubicar el contenido.
+        }        
+    }
+    if (estado_process == OPERACION_EN_PROCESO)
+    {
+        estado_process = NO_ESPACIO_MAT;
+    }
+    return estado_process;
 }
 
-error_t ubi_elements(contenido_t** matriz, size_t longitud, size_t posx_init_cat, size_t posy_init_cat, size_t cant_piedra, size_t cant_llave)
+error_t ubi_elements(contenido_t** matriz, size_t longitud, size_t posx_init_cat, size_t posy_init_cat,
+                     size_t cant_piedra, size_t cant_llave)
 {
-    matriz[POSX_INIT_RATON][POSY_INIT_RATON] = RATON;
-    matriz[posx_init_cat][posy_init_cat] = GATO;
-    matriz[longitud - 1][longitud / 2] = SALIDA;
-    
+    matriz[POSY_INIT_RATON][POSX_INIT_RATON] = RATON;
+    matriz[posy_init_cat]  [posx_init_cat]   = GATO;
+    matriz[longitud - 1]   [longitud / 2]    = SALIDA;
     error_t verif_error = OPERACION_EXITOSA;
     while (cant_piedra > 0 && verif_error != NO_ESPACIO_MAT)
     {
@@ -140,12 +133,12 @@ error_t ubi_elements(contenido_t** matriz, size_t longitud, size_t posx_init_cat
         verif_error = ubi_rndm(matriz, longitud, LLAVE, CANTIDAD_PRUEBAS_RAND);
         cant_llave--;
     }
-    
     return verif_error;
 }
 
 void print_tablero(contenido_t** matriz, size_t longitud)
 {
+    printf("\n");
     for (size_t i = 0; i < longitud; i++)
     {
         for (size_t j = 0; j < longitud; j++)

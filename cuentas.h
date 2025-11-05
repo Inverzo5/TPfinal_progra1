@@ -5,21 +5,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include "extras.h"
 
 #define TABLA_MAX 10000
 #define TABLA_MIN 5
 
 /**
- * Se solicita al usuario cual es la tabla de multiplicar máxima que desea que aparezca en el problema.
+ * Se solicita al usuario que indique la tabla de multiplicar más alta que desea que aparezca en el juego.
  * 
- * @return Entero entre TABLA_MAX y TABLA_MIN que simboliza la tabla máxima deseada por el usuario.
+ * @return Entero entre TABLA_MAX y TABLA_MIN que representa la tabla más alta deseada por el usuario.
  * 
  * @pre
- * - Las librerías stdio.h y stdlib.h deben estar incluidas.
+ * - Las librerías ctype.h, stdio.h y stdlib.h deben estar incluidas.
  * - Los macros TABLA_MAX y TABLA_MIN deben estar definidos.
+ * - El header local extras.h debe estar incluido.
  * @post
- * - Es una función que se comunicará con el usuario a travez de la terminal y obtendrá el entero de
- * retorno a travez de lo ingresado por el usuario.
+ *  - Se retornará un entero obtenido a traves de comunicación con el usuario.
  */
 int soli_max_numero(void);
 
@@ -39,6 +40,20 @@ int soli_max_numero(void);
  */
 int consult_result(int num1, int num2);
 
-bool ope_player();
+/**
+ * Se le hace la cuenta matemática al usuario.
+ * 
+ * @param tabla_max El número más grande que puede aparecer en la cuenta.
+ * @return true en caso de haber resuelto correctamente la cuenta
+ *         false en caso de que se haya equivocado.
+ * 
+ * @pre
+ * - La librería stdlib.h y stdio.h deben estar incluidas.
+ * - La semilla de rand debe estar inicializada.
+ * - La función consult_result debe estar declarada.
+ * @post
+ * - Se comunica con el usuario a travez de la terminal.
+ */
+bool ope_player(int tabla_max);
 
 #endif
